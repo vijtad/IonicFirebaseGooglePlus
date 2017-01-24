@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 
 import { NavController, AlertController, Platform } from 'ionic-angular';
 
-import { AngularFire, FirebaseListObservable, FirebaseAuthState } from 'angularfire2';
+import { AngularFire, FirebaseAuthState,  } from 'angularfire2';
 import {GooglePlus} from 'ionic-native';
-
+import firebase from 'firebase'
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -29,16 +29,18 @@ export class HomePage {
 
         this.platform.ready().then(() => {
            GooglePlus.login({
-             'webClientId' : '<Enter your webclient ID here'
+				'webClientId' : 'Enter_Your_WebClient_From_Firebase'
            })
            .then((userData) => {
 
+                console.log("userData " + JSON.stringify(userData));
+                console.log("firebase " + firebase);
                 var provider = firebase.auth.GoogleAuthProvider.credential(userData.idToken);
 
                  firebase.auth().signInWithCredential(provider)
                   .then((success) => {
                     console.log("Firebase success: " + JSON.stringify(success));
-                    this.displayAlert(success,"signInWithCredential successful")
+                    this.displayAlert(JSON.stringify(success),"signInWithCredential successful")
                     this.userProfile = success;
 
                   })
@@ -48,9 +50,9 @@ export class HomePage {
                   });
 
                  })
-             .catch((error) => {
-                    console.log("Firebase failure: " + JSON.stringify(error));
-                        this.displayAlert(error,"signInWithCredential failed")
+             .catch((gplusErr) => {
+                    console.log("GooglePlus failure: " + JSON.stringify(gplusErr));
+                        this.displayAlert(JSON.stringify(gplusErr),"GooglePlus failed")
                   });
 
             })
@@ -65,12 +67,7 @@ export class HomePage {
       message: JSON.stringify(value),
       buttons: [
                     {
-                        text: "Cancel"
-                    },
-                    {
-                        text: "Save",
-                        handler: data => {
-                        }
+                        text: "OK"
                     }
                ]
       });
@@ -81,3 +78,4 @@ export class HomePage {
 
 
 }
+
