@@ -42,4 +42,5 @@
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [],
+  "description": "googleAuth: An Ionic project"
 }
